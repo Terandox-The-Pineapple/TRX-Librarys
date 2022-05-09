@@ -6,11 +6,11 @@ function initLanguageLink()
         io.write("Use Custom Language File? ( y , n ): ")
         local readHolder = io.read()
         if readHolder == "y" or readHolder == "yes" or readHolder == "Yes" then
-            io.write("Pastebin link: ")
+            io.write("Link: ")
             local pbLink = io.read()
             data.set("LangLink", pbLink, "config")
         else
-            data.set("LangLink", "9zdiC2Yg", "config")
+            data.set("LangLink", "https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/TRXDictionary.lua", "config")
         end
     end
 end
