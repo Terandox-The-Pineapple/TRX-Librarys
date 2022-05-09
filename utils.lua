@@ -30,8 +30,8 @@ function getSplits(sourceString, splittingChar)
     return results
 end
 
-if fs.exists("eventN") == false then shell.run("pastebin get 09wrEpXA eventN") end
-local event = require "eventN"
+if fs.exists("event") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/event.lua event") end
+local event = require "event"
 
 local timers = {}
 
