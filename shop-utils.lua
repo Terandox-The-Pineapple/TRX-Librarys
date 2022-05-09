@@ -3,16 +3,15 @@ local data = require("data")
 
 function initLanguageLink()
     if data.get("LangLink", "config") == nil then
-        print("Use Custom Language File? ( y , n ): ")
-        local readHolder = io.read()
+        io.write("Use Custom Language File? ( y , n ): ")
+        local readHolder = read()
         if readHolder == "y" or readHolder == "yes" or readHolder == "Yes" then
-            print("Link: ")
-            local pbLink = io.read()
+            io.write("Link: ")
+            local pbLink = read()
             data.set("LangLink", pbLink, "config")
         else
             data.set("LangLink", "https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/TRXDictionary.lua", "config")
         end
-        io.close()
     end
 end
 
@@ -33,15 +32,13 @@ function setLanguage()
             end
             counter = counter + 1
         end
-        print(langString)
-        local lang = io.read()
+        io.write(langString)
+        local lang = read()
         if dictionary[lang] == nil then
             print("Not a valid Language!!!")
-            io.close()
             return false
         end
         data.set("language", lang, "config")
-        io.close()
     end
     return true
 end
