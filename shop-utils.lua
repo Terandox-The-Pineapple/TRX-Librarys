@@ -3,10 +3,10 @@ local data = require("data")
 
 function initLanguageLink()
     if data.get("LangLink", "config") == nil then
-        io.write("Use Custom Language File? ( y , n ): ")
+        print("Use Custom Language File? ( y , n ): \n")
         local readHolder = io.read()
         if readHolder == "y" or readHolder == "yes" or readHolder == "Yes" then
-            io.write("Link: ")
+            print("Link: \n")
             local pbLink = io.read()
             data.set("LangLink", pbLink, "config")
         else
@@ -32,7 +32,7 @@ function setLanguage()
             end
             counter = counter + 1
         end
-        io.write(langString)
+        print(langString .. "\n")
         local lang = io.read()
         if dictionary[lang] == nil then
             print("Not a valid Language!!!")
