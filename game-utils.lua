@@ -21,7 +21,7 @@ for x = 1, 51, 1 do
 end
 render = class_lib.class:new(render)
 
-local entity = { posX = 1, posY = 1, render = render:new() }
+local entity = { posX = 1, posY = 1, render = false }
 
 function entity:getSize()
     local sizeX = 0
@@ -91,45 +91,28 @@ end
 
 function entity:kill()
     t_removeItem(self.parent, self)
-    self:destoy()
+    self:destroy()
 end
 
-function entity:collision()
-    local index = t_getIndex(self.parent, self)
-    local colliding = {}
-    for i, item in pairs(self.parent) do
-        if i ~= index then
-            local lastX, lastY = self:getLastPosition()
-            local lastItemX, lastItemY = item:getLastPosition()
-            for x = self.posX, lastX, 1 do
-                local renderX = x - (self.posX - 1)
-                for y = self.posY, lastY, 1 do
-                    local renderY = y - (self.posY - 1)
-                    for i_x = item.posX, lastItemX, 1 do
-                        local renderIX = i_x - (item.posX - 1)
-                        for i_y = item.posY, lastItemY, 1 do
-                            local renderIY = i_y - (item.posY - 1)
-                            if (self.render[renderX][renderY].color ~= false or self.render[renderX][renderY].text ~= false) and (item.render[renderIX][renderIY].color ~= false or item.render[renderIX][renderIY].text ~= false) and x == i_x and y == i_y then
-                                if colliding[i] == nil or colliding[i] ~= true then
-                                    colliding[i] = true
-                                end
-                            end
-                            if colliding[i] == true then break end
-                        end
-                        if colliding[i] == true then break end
+function entity:collision(target)
+    local lastX, lastY = self:getLastPosition()
+    local tLastX, tLastY = target:getLastPosition()
+    for x = self.posX, lastX, 1 do
+        for y = self.posY, lastY, 1 do
+            for tx = target.posX, tLastX, 1 do
+                for ty = target.posY, tLastY, 1 do
+                    if x == tx and y == ty and (self.render[x][y].color ~= false or self.render[x][y].text ~= false) and (target.render[tx][ty].color ~= false or target.render[tx][ty].text ~= false) then
+                        return true
                     end
-                    if colliding[i] == true then break end
                 end
-                if colliding[i] == true then break end
             end
         end
     end
-    return colliding
 end
 
 entity = class_lib.class:new(entity)
 
-local background = { render = render:new() }
+local background = { render = false }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -223,22 +206,30 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new({ posX = posX, posY = posY })
+    players[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+        return render:new()
+    end})
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new({ posX = posX, posY = posY })
+    enemys[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+        return render:new()
+    end})
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new({ posX = posX, posY = posY })
+    others[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+        return render:new()
+    end})
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background:new()
+    backgrounds.backgroundlist[name] = background:new(nil, { render = function ()
+        return render:new()
+    end})
     return backgrounds.backgroundlist[name]
 end
 
