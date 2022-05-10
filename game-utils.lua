@@ -16,7 +16,15 @@ for x = 1, 51, 1 do
         render[x][y].text = false
     end
 end
-local entity = { posX = 1, posY = 1, parent = nil, render = render }
+
+function render:new(o)
+    o = o or render
+    setmetatable(o, self)
+    self._index = self
+    return o
+end
+
+local entity = { posX = 1, posY = 1, parent = nil, render = nil }
 
 function entity:new(o, n_posX, n_posY, n_parent)
     o = o or entity
@@ -27,7 +35,7 @@ function entity:new(o, n_posX, n_posY, n_parent)
     self.posX = n_posX
     self.posY = n_posY
     self.parent = n_parent
-    self.render = render
+    self.render = render:new()
     return o
 end
 
@@ -134,13 +142,13 @@ function entity:collision()
     return colliding
 end
 
-local background = { render = render }
+local background = { render = nil }
 
 function background:new(o)
     o = o or background
     setmetatable(o, self)
     self._index = self
-    self.render = render
+    self.render = render:new()
     return o
 end
 
@@ -266,7 +274,7 @@ function add_menu(name)
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render
+    local n_render = render:new()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
