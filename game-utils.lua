@@ -14,11 +14,11 @@ function render:new(o)
     setmetatable(o, self)
     self._index = self
     for x = 1, 51, 1 do
-        if o[x] == nil then o[x] = {} end
+        if self[x] == nil then self[x] = {} end
         for y = 1, 19, 1 do
-            if o[x][y] == nil then o[x][y] = {} end
-            o[x][y].color = false
-            o[x][y].text = false
+            if self[x][y] == nil then self[x][y] = {} end
+            self[x][y].color = false
+            self[x][y].text = false
         end
     end
     return o
@@ -27,7 +27,7 @@ end
 local entity = {}
 
 function entity:new(o, n_posX, n_posY, n_parent)
-    o = o or { posX = 1, posY = 1, parent = nil, render = nil }
+    o = o or { posX = 1, posY = 1, parent = false, render = false }
     setmetatable(o, self)
     self._index = self
     n_posX = n_posX or 1
@@ -145,7 +145,7 @@ end
 local background = {}
 
 function background:new(o)
-    o = o or { render = nil }
+    o = o or { render = false }
     setmetatable(o, self)
     self._index = self
     self.render = render:new()
