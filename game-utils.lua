@@ -17,10 +17,19 @@ for x = 1, 51, 1 do
     end
 end
 local entity = {}
-entity.posX = 1
-entity.posY = 1
-entity.render = render
-entity.parent = {}
+
+function entity:new(o, n_posX, n_posY, n_parent)
+    o = o or {}
+    setmetatable(o, self)
+    self._index = self
+    n_posX = n_posX or 1
+    n_posY = n_posY or 1
+    self.posX = n_posX
+    self.posY = n_posY
+    self.parent = n_parent
+    self.render = render
+    return o
+end
 
 function entity:getSize()
     local sizeX = 0
@@ -125,25 +134,13 @@ function entity:collision()
     return colliding
 end
 
-function entity:new(o, n_posX, n_posY, n_parent)
-    o = o or {}
-    setmetatable(o, self)
-    self._index = self
-    n_posX = n_posX or 1
-    n_posY = n_posY or 1
-    self.posX = n_posX
-    self.posY = n_posY
-    self.parent = n_parent
-    return o
-end
-
 local background = {}
-background.render = render
 
 function background:new(o)
     o = o or {}
     setmetatable(o, self)
     self._index = self
+    self.render = render
     return o
 end
 
@@ -166,13 +163,13 @@ function background:draw()
 end
 
 local menu = {}
-menu.selection = {}
-menu.selected = 1
 
 function menu:new(o)
     o = o or {}
     setmetatable(o, self)
     self._index = self
+    self.selection = {}
+    self.selected = 1
     return o
 end
 
