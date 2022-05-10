@@ -16,7 +16,7 @@ for x = 1, 51, 1 do
         render[x][y].text = false
     end
 end
-local entity = {}
+local entity = { posX = 1, posY = 1, parent = nil, render = render }
 
 function entity:new(o, n_posX, n_posY, n_parent)
     o = o or {}
@@ -134,7 +134,7 @@ function entity:collision()
     return colliding
 end
 
-local background = {}
+local background = { render = render }
 
 function background:new(o)
     o = o or {}
@@ -162,7 +162,7 @@ function background:draw()
     end
 end
 
-local menu = {}
+local menu = { selection = {}, selected = 1 }
 
 function menu:new(o)
     o = o or {}
