@@ -1,3 +1,6 @@
+if fs.exists("class") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/class.lua class") end
+local class_lib = require("class")
+
 local players = {}
 local enemys = {}
 local others = {}
@@ -8,36 +11,17 @@ local menus = {}
 menus.menulist = {}
 menus.selected = 1
 local render = {}
-
-function render:new(o)
-    o = o or {}
-    for x = 1, 51, 1 do
-        if self[x] == nil then self[x] = {} end
-        for y = 1, 19, 1 do
-            if self[x][y] == nil then self[x][y] = {} end
-            self[x][y].color = false
-            self[x][y].text = false
-        end
+for x = 1, 51, 1 do
+    if render[x] == nil then render[x] = {} end
+    for y = 1, 19, 1 do
+        if render[x][y] == nil then render[x][y] = {} end
+        render[x][y].color = false
+        render[x][y].text = false
     end
-    setmetatable(o, self)
-    self._index = self
-    return o
 end
+render = class_lib.class(render)
 
-local entity = {}
-
-function entity:new(o, n_posX, n_posY, n_parent)
-    o = o or {}
-    n_posX = n_posX or 1
-    n_posY = n_posY or 1
-    self.posX = n_posX
-    self.posY = n_posY
-    self.parent = n_parent
-    self.render = render:new()
-    setmetatable(o, self)
-    self._index = self
-    return o
-end
+local entity = { posX = 1, posY = 1, render = render() }
 
 function entity:getSize()
     local sizeX = 0
@@ -105,8 +89,9 @@ function entity:draw()
     end
 end
 
-function entity:destroy()
+function entity:kill()
     t_removeItem(self.parent, self)
+    self:destoy()
 end
 
 function entity:collision()
@@ -142,15 +127,9 @@ function entity:collision()
     return colliding
 end
 
-local background = {}
+entity = class_lib.class(entity)
 
-function background:new(o)
-    o = o or {}
-    self.render = render:new()
-    setmetatable(o, self)
-    self._index = self
-    return o
-end
+local background = { render = render() }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -170,16 +149,9 @@ function background:draw()
     end
 end
 
-local menu = {}
+background = class_lib.class(background)
 
-function menu:new(o)
-    o = o or {}
-    self.selection = {}
-    self.selected = 1
-    setmetatable(o, self)
-    self._index = self
-    return o
-end
+local menu = { selection = {}, selected = 1}
 
 function menu:draw(posX, posY)
     local my_posY, my_posX = posY, posX
@@ -219,6 +191,8 @@ function menu:down()
     end
 end
 
+menu = class_lib.class(menu)
+
 function t_getIndex(table, item)
     for index, value in pairs(table) do
         if item == value then
@@ -249,32 +223,32 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new(nil, posX, posY, players)
+    players[name] = entity({ posX = posX, posY = posY })
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new(nil, posX, posY, enemys)
+    enemys[name] = entity({ posX = posX, posY = posY })
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new(nil, posX, posY, others)
+    others[name] = entity({ posX = posX, posY = posY })
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background:new()
+    backgrounds.backgroundlist[name] = background()
     return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
-    menus.menulist[name] = menu:new()
+    menus.menulist[name] = menu()
     return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render:new()
+    local n_render = render()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
