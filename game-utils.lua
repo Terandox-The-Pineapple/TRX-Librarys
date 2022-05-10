@@ -14,11 +14,11 @@ function render:new(o)
     setmetatable(o, self)
     self._index = self
     for x = 1, 51, 1 do
-        if self[x] == nil then self[x] = {} end
+        if o[x] == nil then o[x] = {} end
         for y = 1, 19, 1 do
-            if self[x][y] == nil then self[x][y] = {} end
-            self[x][y].color = false
-            self[x][y].text = false
+            if o[x][y] == nil then o[x][y] = {} end
+            o[x][y].color = false
+            o[x][y].text = false
         end
     end
     return o
