@@ -8,26 +8,26 @@ local menus = {}
 menus.menulist = {}
 menus.selected = 1
 local render = {}
-for x = 1, 51, 1 do
-    if render[x] == nil then render[x] = {} end
-    for y = 1, 19, 1 do
-        if render[x][y] == nil then render[x][y] = {} end
-        render[x][y].color = false
-        render[x][y].text = false
-    end
-end
 
 function render:new(o)
-    o = o or render
+    o = o or {}
     setmetatable(o, self)
     self._index = self
+    for x = 1, 51, 1 do
+        if self[x] == nil then self[x] = {} end
+        for y = 1, 19, 1 do
+            if self[x][y] == nil then self[x][y] = {} end
+            self[x][y].color = false
+            self[x][y].text = false
+        end
+    end
     return o
 end
 
-local entity = { posX = 1, posY = 1, parent = nil, render = nil }
+local entity = {}
 
 function entity:new(o, n_posX, n_posY, n_parent)
-    o = o or entity
+    o = o or { posX = 1, posY = 1, parent = nil, render = nil }
     setmetatable(o, self)
     self._index = self
     n_posX = n_posX or 1
@@ -142,10 +142,10 @@ function entity:collision()
     return colliding
 end
 
-local background = { render = nil }
+local background = {}
 
 function background:new(o)
-    o = o or background
+    o = o or { render = nil }
     setmetatable(o, self)
     self._index = self
     self.render = render:new()
@@ -170,10 +170,10 @@ function background:draw()
     end
 end
 
-local menu = { selection = {}, selected = 1 }
+local menu = {}
 
 function menu:new(o)
-    o = o or menu
+    o = o or { selection = {}, selected = 1 }
     setmetatable(o, self)
     self._index = self
     self.selection = {}
