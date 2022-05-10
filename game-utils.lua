@@ -125,20 +125,26 @@ function entity:collision()
     return colliding
 end
 
-function entity:new(n_posX, n_posY, n_parent)
+function entity:new(o, n_posX, n_posY, n_parent)
+    o = o or {}
+    setmetatable(o, self)
+    self._index = self
     n_posX = n_posX or 1
     n_posY = n_posY or 1
     self.posX = n_posX
     self.posY = n_posY
     self.parent = n_parent
-    return self
+    return o
 end
 
 local background = {}
 background.render = render
 
-function background:new()
-    return self
+function background:new(o)
+    o = o or {}
+    setmetatable(o, self)
+    self._index = self
+    return o
 end
 
 function background:draw()
@@ -163,8 +169,11 @@ local menu = {}
 menu.selection = {}
 menu.selected = 1
 
-function menu:new()
-    return self
+function menu:new(o)
+    o = o or {}
+    setmetatable(o, self)
+    self._index = self
+    return o
 end
 
 function menu:draw(posX, posY)
@@ -235,17 +244,17 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new(posX, posY, players)
+    players[name] = entity:new(nil, posX, posY, players)
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new(posX, posY, enemys)
+    enemys[name] = entity:new(nil, posX, posY, enemys)
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new(posX, posY, others)
+    others[name] = entity:new(nil, posX, posY, others)
     return others[name]
 end
 
