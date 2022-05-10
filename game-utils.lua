@@ -14,11 +14,11 @@ function render:new(o)
     setmetatable(o, self)
     self._index = self
     for x = 1, 51, 1 do
-        if self[x] == nil then self[x] = {} end
+        if o[x] == nil then o[x] = {} end
         for y = 1, 19, 1 do
-            if self[x][y] == nil then self[x][y] = {} end
-            self[x][y].color = false
-            self[x][y].text = false
+            if o[x][y] == nil then o[x][y] = {} end
+            o[x][y].color = false
+            o[x][y].text = false
         end
     end
     return o
@@ -32,10 +32,10 @@ function entity:new(o, n_posX, n_posY, n_parent)
     self._index = self
     n_posX = n_posX or 1
     n_posY = n_posY or 1
-    self.posX = n_posX
-    self.posY = n_posY
-    self.parent = n_parent
-    self.render = render:new()
+    o.posX = n_posX
+    o.posY = n_posY
+    o.parent = n_parent
+    o.render = render:new()
     return o
 end
 
@@ -148,7 +148,7 @@ function background:new(o)
     o = o or { render = false }
     setmetatable(o, self)
     self._index = self
-    self.render = render:new()
+    o.render = render:new()
     return o
 end
 
@@ -176,8 +176,8 @@ function menu:new(o)
     o = o or { selection = {}, selected = 1 }
     setmetatable(o, self)
     self._index = self
-    self.selection = {}
-    self.selected = 1
+    o.selection = {}
+    o.selected = 1
     return o
 end
 
