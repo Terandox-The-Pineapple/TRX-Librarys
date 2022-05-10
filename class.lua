@@ -1,7 +1,8 @@
 local class = {}
 
-function class:_init(value)
+function class:new(value)
     local obj = {}
+    value = value or {}
     for index, data in pairs(self) do
         obj[index] = data
     end

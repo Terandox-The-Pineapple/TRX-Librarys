@@ -19,9 +19,9 @@ for x = 1, 51, 1 do
         render[x][y].text = false
     end
 end
-render = class_lib.class(render)
+render = class_lib.class:new(render)
 
-local entity = { posX = 1, posY = 1, render = render() }
+local entity = { posX = 1, posY = 1, render = render:new() }
 
 function entity:getSize()
     local sizeX = 0
@@ -127,9 +127,9 @@ function entity:collision()
     return colliding
 end
 
-entity = class_lib.class(entity)
+entity = class_lib.class:new(entity)
 
-local background = { render = render() }
+local background = { render = render:new() }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -149,7 +149,7 @@ function background:draw()
     end
 end
 
-background = class_lib.class(background)
+background = class_lib.class:new(background)
 
 local menu = { selection = {}, selected = 1}
 
@@ -191,7 +191,7 @@ function menu:down()
     end
 end
 
-menu = class_lib.class(menu)
+menu = class_lib.class:new(menu)
 
 function t_getIndex(table, item)
     for index, value in pairs(table) do
@@ -223,32 +223,32 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity({ posX = posX, posY = posY })
+    players[name] = entity:new({ posX = posX, posY = posY })
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity({ posX = posX, posY = posY })
+    enemys[name] = entity:new({ posX = posX, posY = posY })
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity({ posX = posX, posY = posY })
+    others[name] = entity:new({ posX = posX, posY = posY })
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background()
+    backgrounds.backgroundlist[name] = background:new()
     return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
-    menus.menulist[name] = menu()
+    menus.menulist[name] = menu:new()
     return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render()
+    local n_render = render:new()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
