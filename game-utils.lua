@@ -90,6 +90,19 @@ function entity:draw()
     end
 end
 
+function entity:undraw()
+    local sizeX, sizeY = self:getSize()
+    for x = 1, sizeX, 1 do
+        for y = 1, sizeY, 1 do
+            if self.render[x][y].color ~= false or self.render[x][y].text ~= false then
+                term.setCursorPos(x + (self.posX - 1), y + (self.posY - 1))
+                term.setBackgroundColor(backgrounds.backgroundlist[backgrounds.selected].render[x + (self.posX - 1)][y + (self.posY - 1)].color)
+                term.write(" ")
+            end
+        end
+    end
+end
+
 function entity:kill()
     t_removeItem(self.parent, self)
     self:destroy()
