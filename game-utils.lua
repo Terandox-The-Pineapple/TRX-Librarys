@@ -11,14 +11,18 @@ local menus = {}
 menus.menulist = {}
 menus.selected = 1
 local render = {}
-for x = 1, 51, 1 do
-    if render[x] == nil then render[x] = {} end
-    for y = 1, 19, 1 do
-        if render[x][y] == nil then render[x][y] = {} end
-        render[x][y].color = false
-        render[x][y].text = false
+
+function render:init()
+    for x = 1, 51, 1 do
+        if self[x] == nil then self[x] = {} end
+        for y = 1, 19, 1 do
+            if self[x][y] == nil then self[x][y] = {} end
+            self[x][y].color = false
+            self[x][y].text = false
+        end
     end
 end
+
 render = class_lib.class:new(render)
 
 local entity = { posX = 1, posY = 1, render = false }
@@ -207,28 +211,36 @@ end
 
 function add_player(posX, posY, name)
     players[name] = entity:new({ posX = posX, posY = posY }, { render = function()
-        return render:new()
+        local new_render = render:new()
+        new_render:init()
+        return new_render
     end })
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
     enemys[name] = entity:new({ posX = posX, posY = posY }, { render = function()
-        return render:new()
+        local new_render = render:new()
+        new_render:init()
+        return new_render
     end })
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
     others[name] = entity:new({ posX = posX, posY = posY }, { render = function()
-        return render:new()
+        local new_render = render:new()
+        new_render:init()
+        return new_render
     end })
     return others[name]
 end
 
 function add_background(name)
     backgrounds.backgroundlist[name] = background:new(nil, { render = function()
-        return render:new()
+        local new_render = render:new()
+        new_render:init()
+        return new_render
     end })
     return backgrounds.backgroundlist[name]
 end
@@ -240,6 +252,7 @@ end
 
 function add_menu_point(target, text, color)
     local n_render = render:new()
+    n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
