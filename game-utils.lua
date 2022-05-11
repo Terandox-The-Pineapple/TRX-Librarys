@@ -147,7 +147,7 @@ function menu:draw(posX, posY)
         if point[1][1].color ~= false then
             term.setBackgroundColor(point[1][1].color)
         else
-            term.setBackgroundColor(backgrounds[backgrounds.selected].render[my_posX][my_posY].color)
+            term.setBackgroundColor(backgrounds.backgroundlist[backgrounds.selected].render[my_posX][my_posY].color)
         end
         if index == self.selected then
             term.setTextColor(colours.green)
