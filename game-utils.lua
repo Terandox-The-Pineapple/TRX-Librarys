@@ -11,14 +11,18 @@ local menus = {}
 menus.menulist = {}
 menus.selected = 1
 local render = {}
-for x = 1, 51, 1 do
-    if render[x] == nil then render[x] = {} end
-    for y = 1, 19, 1 do
-        if render[x][y] == nil then render[x][y] = {} end
-        render[x][y].color = false
-        render[x][y].text = false
+
+function render:init()
+    for x = 1, 51, 1 do
+        if self[x] == nil then self[x] = {} end
+        for y = 1, 19, 1 do
+            if self[x][y] == nil then self[x][y] = {} end
+            self[x][y].color = false
+            self[x][y].text = false
+        end
     end
 end
+
 render = class_lib.class:new(render)
 
 local entity = { posX = 1, posY = 1, render = false }
@@ -134,7 +138,7 @@ end
 
 background = class_lib.class:new(background)
 
-local menu = { selection = {}, selected = 1}
+local menu = { selection = {}, selected = 1 }
 
 function menu:draw(posX, posY)
     local my_posY, my_posX = posY, posX
@@ -206,40 +210,50 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+    players[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
-    end})
-    return players[name]
+    end })
+    local new_player = players[name]
+    new_player.render:init()
+    return new_player
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+    enemys[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
-    end})
-    return enemys[name]
+    end })
+    local new_enemy = enemys[name]
+    new_enemy.render:init()
+    return new_enemy
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new({ posX = posX, posY = posY }, { render = function ()
+    others[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
-    end})
-    return others[name]
+    end })
+    local new_other = others[name]
+    new_other.render:init()
+    return new_other
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background:new(nil, { render = function ()
+    backgrounds.backgroundlist[name] = background:new(nil, { render = function()
         return render:new()
-    end})
-    return backgrounds.backgroundlist[name]
+    end })
+    local new_background = backgrounds.backgroundlist[name]
+    new_background.render:init()
+    return new_background
 end
 
 function add_menu(name)
     menus.menulist[name] = menu:new()
-    return menus.menulist[name]
+    local new_menu = menus.menulist[name]
+    return new_menu
 end
 
 function add_menu_point(target, text, color)
     local n_render = render:new()
+    n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
