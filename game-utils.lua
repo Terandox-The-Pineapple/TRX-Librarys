@@ -147,6 +147,10 @@ function menu:draw(posX, posY)
         if point[1][1].color ~= false then
             term.setBackgroundColor(point[1][1].color)
         else
+            print(textutils.serialise(backgrounds[backgrounds.selected].render))
+            print(backgrounds.selected)
+            print(textutils.serialise(backgrounds[backgrounds.selected].render[my_posX][my_posY]))
+            print(textutils.serialise(backgrounds[backgrounds.selected].render[my_posX][my_posY].color))
             term.setBackgroundColor(backgrounds[backgrounds.selected].render[my_posX][my_posY].color)
         end
         if index == self.selected then
