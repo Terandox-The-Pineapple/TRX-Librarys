@@ -9,7 +9,7 @@ menus.menulist = {}
 menus.selected = 1
 local render = {}
 
-function render._new(para)
+function render.new(para)
     local self = para or {}
     setmetatable(self, { _index = render })
     return self
@@ -26,11 +26,9 @@ function render:init()
     end
 end
 
-setmetatable(render, { _call = render._new })
-
 local entity = { posX = 1, posY = 1, render = false }
 
-function entity._new(para)
+function entity.new(para)
     local self = para or {}
     setmetatable(self, { _index = entity })
     return self
@@ -123,11 +121,9 @@ function entity:collision(target)
     end
 end
 
-setmetatable(entity, { _call = entity._new })
-
 local background = { render = false }
 
-function background._new(para)
+function background.new(para)
     local self = para or {}
     setmetatable(self, { _index = background })
     return self
@@ -151,11 +147,9 @@ function background:draw()
     end
 end
 
-setmetatable(background, { _call = background._new })
-
 local menu = { selection = {}, selected = 1 }
 
-function menu._new(para)
+function menu.new(para)
     local self = para or {}
     setmetatable(self, { _index = menu })
     return self
@@ -199,8 +193,6 @@ function menu:down()
     end
 end
 
-setmetatable(menu, { _call = menu._new })
-
 function t_getIndex(table, item)
     for index, value in pairs(table) do
         if item == value then
@@ -231,36 +223,36 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity({ posX = posX, posY = posY, render = render() })
+    players[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     players[name].render:init()
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity({ posX = posX, posY = posY, render = render() })
+    enemys[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     enemys[name].render:init()
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity({ posX = posX, posY = posY, render = render() })
+    others[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     others[name].render:init()
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background({ render = render() })
+    backgrounds.backgroundlist[name] = background.new({ render = render.new() })
     backgrounds.backgroundlist[name].render:init()
     return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
-    menus.menulist[name] = menu()
+    menus.menulist[name] = menu.new()
     return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render()
+    local n_render = render.new()
     n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
