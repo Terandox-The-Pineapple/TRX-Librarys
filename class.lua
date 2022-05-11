@@ -11,8 +11,6 @@ function new(value)
         self = nil
     end
 
-    setmetatable(class, { _call = class.new })
-
     return class
 end
 

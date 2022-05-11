@@ -210,36 +210,36 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity({ posX = posX, posY = posY, render = render() })
+    players[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     players[name].render:init()
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity({ posX = posX, posY = posY, render = render() })
+    enemys[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     enemys[name].render:init()
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity({ posX = posX, posY = posY, render = render() })
+    others[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
     others[name].render:init()
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background({ render = render() })
+    backgrounds.backgroundlist[name] = background.new({ render = render.new() })
     backgrounds.backgroundlist[name].render:init()
     return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
-    menus.menulist[name] = menu()
+    menus.menulist[name] = menu.new()
     return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render()
+    local n_render = render.new()
     n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
