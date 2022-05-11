@@ -179,21 +179,22 @@ end
 
 menu = class_lib.class:new(menu)
 
-local controller = { buffer = false, finished = false, keys = {} }
+local controller = { finished = false, keys = {} }
 
 function controller:start(p_func)
     self.finished = false
-    self.buffer = false
     while self.finished == false do
-        parallel.waitForAny(self.get_key, p_func)
+        parallel.waitForAny(function() self:get_key() end, p_func)
     end
 end
 
-function controller.get_key()
-    local _, key = os.pullEvent("key")
-    for index, data in pairs(self.keys) do
-        if data.key == key then
-            data.func()
+function controller:get_key()
+    while self.finished == false do
+        local _, key = os.pullEvent("key")
+        for index, data in pairs(self.keys) do
+            if data.key == key then
+                data.func()
+            end
         end
     end
 end
@@ -297,4 +298,4 @@ function add_controller_key(target, name, key, func)
     return controllers[index].keys[name]
 end
 
-return { t_getIndex = t_getIndex, t_removeIndex = t_removeIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu }
+return { t_getIndex = t_getIndex, t_removeIndex = t_removeIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
