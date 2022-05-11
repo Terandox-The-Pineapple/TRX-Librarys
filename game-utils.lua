@@ -69,27 +69,23 @@ function entity:getLastPosition()
 end
 
 function entity:draw()
-    local lastX, lastY = self:getLastPosition()
-    local countX = 1
-    local countY = 1
-    for x = 1, 51, 1 do
-        local is_in = false
-        for y = 1, 19, 1 do
-            if x >= self.posX and x <= lastX and y >= self.posY and y <= lastY then
-                term.setCursorPos(x, y)
-                if self.render[countX][countY].color ~= false and self.render[countX][countY].text ~= false then
-                    term.setBackgroundColor(self.render[countX][countY].color)
-                    term.write(self.render[countX][countY].text)
-                elseif self.render[countX][countY].text ~= false then
-                    term.setBackgroundColor(backgrounds.backgroundlist[backgrounds.selected].render[x][y].color)
-                    term.write(self.render[countX][countY].text)
+    local sizeX, sizeY = self:getSize()
+    for x = 1, sizeX, 1 do
+        for y = 1, sizeY, 1 do
+            if self.render[x][y].color ~= false or self.render[x][y].text ~= false then
+                term.setCursorPos(x + (self.posX - 1), y + (self.posY - 1))
+                if self.render[x][y].color ~= false then
+                    term.setBackgroundColor(self.render[x][y].color)
+                else
+                    term.setBackgroundColor(backgrounds.backgroundlist[backgrounds.selected].render[x + (self.posX - 1)][y + (self.posY - 1)].color)
                 end
-                countY = countY + 1
-                is_in = true
+                if self.render[x][y].text ~= false then
+                    term.write(self.render[x][y].text)
+                else
+                    term.write(" ")
+                end
             end
         end
-        countY = 1
-        if x >= self.posX and x <= lastX and is_in then countX = countX + 1 end
     end
 end
 
