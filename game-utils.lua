@@ -10,6 +10,7 @@ backgrounds.selected = 1
 local menus = {}
 menus.menulist = {}
 menus.selected = 1
+local controllers = {}
 local render = {}
 
 function render:init()
@@ -178,6 +179,31 @@ end
 
 menu = class_lib.class:new(menu)
 
+local controller = { buffer = false, finished = false, keys = {} }
+
+function controller:start(p_func)
+    self.finished = false
+    self.buffer = false
+    while self.finished == false do
+        parallel.waitForAny(self.get_key, p_func)
+    end
+end
+
+function controller.get_key()
+    local _, key = os.pullEvent("key")
+    for index, data in pairs(self.keys) do
+        if data.key == key then
+            data.func()
+        end
+    end
+end
+
+function controller:stop()
+    self.finished = true
+end
+
+controller = class_lib.class:new(controller)
+
 function t_getIndex(table, item)
     for index, value in pairs(table) do
         if item == value then
@@ -208,19 +234,19 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
+    players[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = players })
     players[name].render:init()
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
+    enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = enemys })
     enemys[name].render:init()
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
+    others[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = others })
     others[name].render:init()
     return others[name]
 end
@@ -258,6 +284,17 @@ function change_menu(target, posX, posY)
     local index = t_getIndex(menus.menulist, target)
     menus.selected = index
     menus.menulist[index]:draw(posX, posY)
+end
+
+function add_controller(name)
+    controllers[name] = controller:new()
+    return controllers[name]
+end
+
+function add_controller_key(target, name, key, func)
+    local index = t_getIndex(controllers, target)
+    controllers[index].keys[name] = { key = key, func = func }
+    return controllers[index].keys[name]
 end
 
 return { t_getIndex = t_getIndex, t_removeIndex = t_removeIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu }
