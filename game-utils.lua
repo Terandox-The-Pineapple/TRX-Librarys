@@ -147,10 +147,6 @@ function menu:draw(posX, posY)
         if point[1][1].color ~= false then
             term.setBackgroundColor(point[1][1].color)
         else
-            print(textutils.serialise(backgrounds[backgrounds.selected].render))
-            print(backgrounds.selected)
-            print(textutils.serialise(backgrounds[backgrounds.selected].render[my_posX][my_posY]))
-            print(textutils.serialise(backgrounds[backgrounds.selected].render[my_posX][my_posY].color))
             term.setBackgroundColor(backgrounds[backgrounds.selected].render[my_posX][my_posY].color)
         end
         if index == self.selected then
@@ -217,42 +213,37 @@ function add_player(posX, posY, name)
     players[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
     end })
-    local new_player = players[name]
-    new_player.render:init()
-    return new_player
+    players[name].render:init()
+    return players[name]
 end
 
 function add_enemy(posX, posY, name)
     enemys[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
     end })
-    local new_enemy = enemys[name]
-    new_enemy.render:init()
-    return new_enemy
+    enemys[name].render:init()
+    return enemys[name]
 end
 
 function add_other(posX, posY, name)
     others[name] = entity:new({ posX = posX, posY = posY }, { render = function()
         return render:new()
     end })
-    local new_other = others[name]
-    new_other.render:init()
-    return new_other
+    others[name].render:init()
+    return others[name]
 end
 
 function add_background(name)
     backgrounds.backgroundlist[name] = background:new(nil, { render = function()
         return render:new()
     end })
-    local new_background = backgrounds.backgroundlist[name]
-    new_background.render:init()
-    return new_background
+    backgrounds.backgroundlist[name].render:init()
+    return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
     menus.menulist[name] = menu:new()
-    local new_menu = menus.menulist[name]
-    return new_menu
+    return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
