@@ -104,6 +104,7 @@ function entity:undraw()
 end
 
 function entity:kill()
+    self:undraw()
     t_removeItem(self.parent, self)
     self:destroy()
 end
