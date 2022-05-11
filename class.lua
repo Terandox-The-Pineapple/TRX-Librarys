@@ -28,7 +28,7 @@ function class:t_rebuild(my_table)
     my_table = my_table or {}
     local new_table = {}
     for index, data in pairs(my_table) do
-        if type(data) == "table" and type(data) ~= "function" then
+        if type(data) == "table" then
             new_table[index] = self:t_rebuild(data)
         else
             new_table[index] = data
