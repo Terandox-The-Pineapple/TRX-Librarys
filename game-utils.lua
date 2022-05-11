@@ -184,7 +184,7 @@ local controller = { finished = false, keys = {} }
 function controller:start(p_func)
     self.finished = false
     while self.finished == false do
-        parallel.waitForAny(self.get_key, p_func)
+        parallel.waitForAny(function() self:get_key() end, p_func)
     end
 end
 
