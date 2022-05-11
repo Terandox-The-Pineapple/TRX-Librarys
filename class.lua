@@ -1,13 +1,19 @@
-local class = {}
+function new(value)
+    local class = value or {}
 
-function class:new(value)
-    local new_self = value
-    setmetatable(new_self, { _index = self })
-    return new_self
+    function class.new(my_value)
+        local self = my_value or {}
+        setmetatable(self, { _index = class })
+        return self
+    end
+
+    function class:destroy()
+        self = nil
+    end
+
+    setmetatable(class, { _call = class.new })
+
+    return class
 end
 
-function class:destroy()
-    self = nil
-end
-
-return { class = class }
+return { new = new }
