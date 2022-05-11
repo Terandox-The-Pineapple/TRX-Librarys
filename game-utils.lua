@@ -12,6 +12,8 @@ menus.menulist = {}
 menus.selected = 1
 local render = {}
 
+render = class_lib.new(render)
+
 function render:init()
     for x = 1, 51, 1 do
         if self[x] == nil then self[x] = {} end
@@ -23,9 +25,9 @@ function render:init()
     end
 end
 
-render = class_lib.new(render)
-
 local entity = { posX = 1, posY = 1, render = false }
+
+entity = class_lib.new(entity)
 
 function entity:getSize()
     local sizeX = 0
@@ -114,9 +116,9 @@ function entity:collision(target)
     end
 end
 
-entity = class_lib.new(entity)
-
 local background = { render = false }
+
+background = class_lib.new(background)
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -136,9 +138,9 @@ function background:draw()
     end
 end
 
-background = class_lib.new(background)
-
 local menu = { selection = {}, selected = 1 }
+
+menu = class_lib.new(menu)
 
 function menu:draw(posX, posY)
     local my_posY, my_posX = posY, posX
@@ -177,8 +179,6 @@ function menu:down()
         self.selected = 1
     end
 end
-
-menu = class_lib.new(menu)
 
 function t_getIndex(table, item)
     for index, value in pairs(table) do
