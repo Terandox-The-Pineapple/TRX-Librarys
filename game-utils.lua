@@ -97,11 +97,13 @@ end
 function entity:collision(target)
     local lastX, lastY = self:getLastPosition()
     local tLastX, tLastY = target:getLastPosition()
+    local sizeX, sizeY = self:getSize()
+    local tSizeX, tSizeY = target:getSize()
     for x = self.posX, lastX, 1 do
         for y = self.posY, lastY, 1 do
             for tx = target.posX, tLastX, 1 do
                 for ty = target.posY, tLastY, 1 do
-                    if x == tx and y == ty and (self.render[x][y].color ~= false or self.render[x][y].text ~= false) and (target.render[tx][ty].color ~= false or target.render[tx][ty].text ~= false) then
+                    if x == tx and y == ty and (self.render[x - (self.posX - 1)][y - (self.posY - 1)].color ~= false or self.render[x - (self.posX - 1)][y - (self.posY - 1)].text ~= false) and (target.render[tx - (target.posX - 1)][ty - (target.posY - 1)].color ~= false or target.render[tx - (target.posX - 1)][ty - (target.posY - 1)].text ~= false) then
                         return true
                     end
                 end
