@@ -1,17 +1,32 @@
-function new(value)
-    local class = value or {}
+local class = {}
 
-    function class:new(my_value)
-        local new_self = my_value or {}
-        setmetatable(new_self, { _index = self })
-        return new_self
+function class:new(value, generate)
+    local obj = {}
+    local gen = self.generate or {}
+    generate = generate or {}
+    value = value or {}
+    classes = classes or {}
+    for index, data in pairs(self) do
+        obj[index] = data
     end
-
-    function class:destroy()
-        self = nil
+    for index2, data2 in pairs(value) do
+        obj[index2] = data2
     end
-
-    return class
+    for index3, data3 in pairs(generate) do
+        if type(data3) == "function" then
+            gen[index3] = data3
+        end
+    end
+    for genindex, gendata in pairs(gen) do
+        obj[genindex] = gendata()
+    end
+    obj.generate = gen
+    obj.parent = self
+    return obj
 end
 
-return { new = new }
+function class:destroy()
+    self = nil
+end
+
+return { class = class }
