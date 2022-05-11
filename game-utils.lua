@@ -1,3 +1,6 @@
+if fs.exists("class") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/class.lua class") end
+local class_lib = require("class")
+
 local players = {}
 local enemys = {}
 local others = {}
@@ -8,12 +11,6 @@ local menus = {}
 menus.menulist = {}
 menus.selected = 1
 local render = {}
-
-function render.new(para)
-    local self = para or {}
-    setmetatable(self, { _index = render })
-    return self
-end
 
 function render:init()
     for x = 1, 51, 1 do
@@ -26,13 +23,9 @@ function render:init()
     end
 end
 
-local entity = { posX = 1, posY = 1, render = false }
+render = class_lib.class:new(render)
 
-function entity.new(para)
-    local self = para or {}
-    setmetatable(self, { _index = entity })
-    return self
-end
+local entity = { posX = 1, posY = 1, render = false }
 
 function entity:getSize()
     local sizeX = 0
@@ -121,13 +114,9 @@ function entity:collision(target)
     end
 end
 
-local background = { render = false }
+entity = class_lib.class:new(entity)
 
-function background.new(para)
-    local self = para or {}
-    setmetatable(self, { _index = background })
-    return self
-end
+local background = { render = false }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -147,13 +136,9 @@ function background:draw()
     end
 end
 
-local menu = { selection = {}, selected = 1 }
+background = class_lib.class:new(background)
 
-function menu.new(para)
-    local self = para or {}
-    setmetatable(self, { _index = menu })
-    return self
-end
+local menu = { selection = {}, selected = 1 }
 
 function menu:draw(posX, posY)
     local my_posY, my_posX = posY, posX
@@ -193,6 +178,8 @@ function menu:down()
     end
 end
 
+menu = class_lib.class:new(menu)
+
 function t_getIndex(table, item)
     for index, value in pairs(table) do
         if item == value then
@@ -223,36 +210,36 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
+    players[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
     players[name].render:init()
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
+    enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
     enemys[name].render:init()
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity.new({ posX = posX, posY = posY, render = render.new() })
+    others[name] = entity:new({ posX = posX, posY = posY, render = render:new() })
     others[name].render:init()
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background.new({ render = render.new() })
+    backgrounds.backgroundlist[name] = background:new({ render = render:new() })
     backgrounds.backgroundlist[name].render:init()
     return backgrounds.backgroundlist[name]
 end
 
 function add_menu(name)
-    menus.menulist[name] = menu.new()
+    menus.menulist[name] = menu:new()
     return menus.menulist[name]
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render.new()
+    local n_render = render:new()
     n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
