@@ -13,14 +13,12 @@ menus.selected = 1
 local controllers = {}
 local render = {}
 
-function render:init()
-    for x = 1, 51, 1 do
-        if self[x] == nil then self[x] = {} end
-        for y = 1, 19, 1 do
-            if self[x][y] == nil then self[x][y] = {} end
-            self[x][y].color = false
-            self[x][y].text = false
-        end
+for x = 1, 51, 1 do
+    if render[x] == nil then render[x] = {} end
+    for y = 1, 19, 1 do
+        if render[x][y] == nil then render[x][y] = {} end
+        render[x][y].color = false
+        render[x][y].text = false
     end
 end
 
@@ -250,25 +248,21 @@ end
 
 function add_player(posX, posY, name)
     players[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = players })
-    players[name].render:init()
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
     enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = enemys })
-    enemys[name].render:init()
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
     others[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = others })
-    others[name].render:init()
     return others[name]
 end
 
 function add_background(name)
     backgrounds.backgroundlist[name] = background:new({ render = render:new() })
-    backgrounds.backgroundlist[name].render:init()
     return backgrounds.backgroundlist[name]
 end
 
@@ -279,7 +273,6 @@ end
 
 function add_menu_point(target, text, color)
     local n_render = render:new()
-    n_render:init()
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
