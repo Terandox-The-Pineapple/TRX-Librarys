@@ -13,20 +13,16 @@ menus.selected = 1
 local controllers = {}
 local render = {}
 
-function render:init()
-    for x = 1, 51, 1 do
-        if self[x] == nil then self[x] = {} end
-        for y = 1, 19, 1 do
-            if self[x][y] == nil then self[x][y] = {} end
-            self[x][y].color = false
-            self[x][y].text = false
-        end
+for x = 1, 51, 1 do
+    if render[x] == nil then render[x] = {} end
+    for y = 1, 19, 1 do
+        if render[x][y] == nil then render[x][y] = {} end
+        render[x][y].color = false
+        render[x][y].text = false
     end
 end
 
-render = class_lib.class:new(render)
-
-local entity = { posX = 1, posY = 1, render = false }
+local entity = { posX = 1, posY = 1, render = class_lib.class:t_rebuild(render) }
 
 function entity:getSize()
     local sizeX = 0
@@ -90,7 +86,21 @@ function entity:draw()
     end
 end
 
+function entity:undraw()
+    local sizeX, sizeY = self:getSize()
+    for x = 1, sizeX, 1 do
+        for y = 1, sizeY, 1 do
+            if self.render[x][y].color ~= false or self.render[x][y].text ~= false then
+                term.setCursorPos(x + (self.posX - 1), y + (self.posY - 1))
+                term.setBackgroundColor(backgrounds.backgroundlist[backgrounds.selected].render[x + (self.posX - 1)][y + (self.posY - 1)].color)
+                term.write(" ")
+            end
+        end
+    end
+end
+
 function entity:kill()
+    self:undraw()
     t_removeItem(self.parent, self)
     self:destroy()
 end
@@ -115,7 +125,7 @@ end
 
 entity = class_lib.class:new(entity)
 
-local background = { render = false }
+local background = { render = class_lib.class:t_rebuild(render) }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -214,47 +224,29 @@ function t_getIndex(table, item)
     return false
 end
 
-function t_removeIndex(table, index)
-    local new_table = {}
-    for i, value in pairs(table) do
-        if i ~= index then
-            if type(i) == "number" then
-                new_table[#new_table + 1] = table[i]
-            else
-                new_table[i] = table[i]
-            end
-        end
-    end
-    table = new_table
-    return table
-end
-
-function t_removeItem(table, item)
-    local index = t_getIndex(table, item)
-    return t_removeIndex(table, index)
+function t_removeItem(r_table, item)
+    local index = t_getIndex(r_table, item)
+    if index ~= false then return table.remove(r_table, index)
+    else return false end
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = players })
-    players[name].render:init()
+    players[name] = entity:new({ posX = posX, posY = posY, parent = players })
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = enemys })
-    enemys[name].render:init()
+    enemys[name] = entity:new({ posX = posX, posY = posY, parent = enemys })
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = others })
-    others[name].render:init()
+    others[name] = entity:new({ posX = posX, posY = posY, parent = others })
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background:new({ render = render:new() })
-    backgrounds.backgroundlist[name].render:init()
+    backgrounds.backgroundlist[name] = background:new()
     return backgrounds.backgroundlist[name]
 end
 
@@ -264,8 +256,7 @@ function add_menu(name)
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render:new()
-    n_render:init()
+    local n_render = class_lib.class:t_rebuild(render)
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
@@ -298,4 +289,4 @@ function add_controller_key(target, name, key, func)
     return controllers[index].keys[name]
 end
 
-return { t_getIndex = t_getIndex, t_removeIndex = t_removeIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
+return { t_getIndex = t_getIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
