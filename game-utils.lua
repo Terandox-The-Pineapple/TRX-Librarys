@@ -224,9 +224,9 @@ function t_getIndex(table, item)
     return false
 end
 
-function t_removeItem(table, item)
-    local index = t_getIndex(table, item)
-    if index ~= false then return table.remove(table, index)
+function t_removeItem(r_table, item)
+    local index = t_getIndex(r_table, item)
+    if index ~= false then return table.remove(r_table, index)
     else return false end
 end
 
