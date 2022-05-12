@@ -1,5 +1,7 @@
 if fs.exists("class") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/class.lua class") end
 local class_lib = require("class")
+if fs.exists("table-utils") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/table-utils.lua table-utils") end
+local table_utils = require("table-utils")
 
 local players = {}
 local enemys = {}
@@ -22,7 +24,7 @@ for x = 1, 51, 1 do
     end
 end
 
-local entity = { posX = 1, posY = 1, render = class_lib.class:t_rebuild(render) }
+local entity = { posX = 1, posY = 1, render = table_utils.rebuild(render) }
 
 function entity:getSize()
     local sizeX = 0
@@ -101,7 +103,7 @@ end
 
 function entity:kill()
     self:undraw()
-    t_removeItem(self.parent, self)
+    table_utils.removeItem(self.parent, self)
     self:destroy()
 end
 
@@ -125,7 +127,7 @@ end
 
 entity = class_lib.class:new(entity)
 
-local background = { render = class_lib.class:t_rebuild(render) }
+local background = { render = table_utils.rebuild(render) }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -215,21 +217,6 @@ end
 
 controller = class_lib.class:new(controller)
 
-function t_getIndex(table, item)
-    for index, value in pairs(table) do
-        if item == value then
-            return index
-        end
-    end
-    return false
-end
-
-function t_removeItem(r_table, item)
-    local index = t_getIndex(r_table, item)
-    if index ~= false then return table.remove(r_table, index)
-    else return false end
-end
-
 function add_player(posX, posY, name)
     players[name] = entity:new({ posX = posX, posY = posY, parent = players })
     return players[name]
@@ -257,7 +244,7 @@ end
 
 function add_menu_point(target, text, color)
     local n_render = class_lib.class:t_rebuild(render)
-    local index = t_getIndex(menus.menulist, target)
+    local index = table_utils.getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
         n_render[1][1].color = color
@@ -267,13 +254,13 @@ function add_menu_point(target, text, color)
 end
 
 function change_background(target)
-    local index = t_getIndex(backgrounds.backgroundlist, target)
+    local index = table_utils.getIndex(backgrounds.backgroundlist, target)
     backgrounds.selected = index
     backgrounds.backgroundlist[index]:draw()
 end
 
 function change_menu(target, posX, posY)
-    local index = t_getIndex(menus.menulist, target)
+    local index = table_utils.getIndex(menus.menulist, target)
     menus.selected = index
     menus.menulist[index]:draw(posX, posY)
 end
@@ -284,9 +271,9 @@ function add_controller(name)
 end
 
 function add_controller_key(target, name, key, func)
-    local index = t_getIndex(controllers, target)
+    local index = table_utils.getIndex(controllers, target)
     controllers[index].keys[name] = { key = key, func = func }
     return controllers[index].keys[name]
 end
 
-return { t_getIndex = t_getIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
+return { add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }

@@ -1,3 +1,6 @@
+if fs.exists("table-utils") == false then shell.run("wget https://raw.githubusercontent.com/Terandox-The-Pineapple/TRX-Librarys/main/table-utils.lua table-utils") end
+local table_utils = require("table-utils")
+
 local class = {}
 
 function class:new(value)
@@ -5,14 +8,14 @@ function class:new(value)
     local new_class = {}
     for cindex, cdata in pairs(self) do
         if type(cdata) == "table" then
-            new_class[cindex] = self:t_rebuild(cdata)
+            new_class[cindex] = table_utils.rebuild(cdata)
         else
             new_class[cindex] = cdata
         end
     end
     for vindex, vdata in pairs(value) do
         if type(vdata) == "table" then
-            new_class[vindex] = self:t_rebuild(vdata)
+            new_class[vindex] = table_utils.rebuild(vdata)
         else
             new_class[vindex] = vdata
         end
@@ -22,19 +25,6 @@ end
 
 function class:destroy()
     self = nil
-end
-
-function class:t_rebuild(my_table)
-    my_table = my_table or {}
-    local new_table = {}
-    for index, data in pairs(my_table) do
-        if type(data) == "table" then
-            new_table[index] = self:t_rebuild(data)
-        else
-            new_table[index] = data
-        end
-    end
-    return new_table
 end
 
 return { class = class }
