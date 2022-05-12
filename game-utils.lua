@@ -224,24 +224,10 @@ function t_getIndex(table, item)
     return false
 end
 
-function t_removeIndex(table, index)
-    local new_table = {}
-    for i, value in pairs(table) do
-        if i ~= index then
-            if type(i) == "number" then
-                new_table[#new_table + 1] = table[i]
-            else
-                new_table[i] = table[i]
-            end
-        end
-    end
-    table = new_table
-    return table
-end
-
 function t_removeItem(table, item)
     local index = t_getIndex(table, item)
-    return t_removeIndex(table, index)
+    if index ~= false then return table.remove(table, index)
+    else return false end
 end
 
 function add_player(posX, posY, name)
@@ -303,4 +289,4 @@ function add_controller_key(target, name, key, func)
     return controllers[index].keys[name]
 end
 
-return { t_getIndex = t_getIndex, t_removeIndex = t_removeIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
+return { t_getIndex = t_getIndex, t_removeItem = t_removeItem, add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
