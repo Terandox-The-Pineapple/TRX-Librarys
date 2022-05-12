@@ -22,9 +22,7 @@ for x = 1, 51, 1 do
     end
 end
 
-render = class_lib.class:new(render)
-
-local entity = { posX = 1, posY = 1, render = false }
+local entity = { posX = 1, posY = 1, render = class_lib.class:t_rebuild(render) }
 
 function entity:getSize()
     local sizeX = 0
@@ -127,7 +125,7 @@ end
 
 entity = class_lib.class:new(entity)
 
-local background = { render = false }
+local background = { render = class_lib.class:t_rebuild(render) }
 
 function background:draw()
     for x = 1, 51, 1 do
@@ -247,22 +245,22 @@ function t_removeItem(table, item)
 end
 
 function add_player(posX, posY, name)
-    players[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = players })
+    players[name] = entity:new({ posX = posX, posY = posY, parent = players })
     return players[name]
 end
 
 function add_enemy(posX, posY, name)
-    enemys[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = enemys })
+    enemys[name] = entity:new({ posX = posX, posY = posY, parent = enemys })
     return enemys[name]
 end
 
 function add_other(posX, posY, name)
-    others[name] = entity:new({ posX = posX, posY = posY, render = render:new(), parent = others })
+    others[name] = entity:new({ posX = posX, posY = posY, parent = others })
     return others[name]
 end
 
 function add_background(name)
-    backgrounds.backgroundlist[name] = background:new({ render = render:new() })
+    backgrounds.backgroundlist[name] = background:new()
     return backgrounds.backgroundlist[name]
 end
 
@@ -272,7 +270,7 @@ function add_menu(name)
 end
 
 function add_menu_point(target, text, color)
-    local n_render = render:new()
+    local n_render = class_lib.class:t_rebuild(render)
     local index = t_getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
