@@ -243,7 +243,7 @@ function add_menu(name)
 end
 
 function add_menu_point(target, text, color)
-    local n_render = class_lib.class:t_rebuild(render)
+    local n_render = table_utils.rebuild(render)
     local index = table_utils.getIndex(menus.menulist, target)
     n_render[1][1].text = text
     if color ~= nil then
