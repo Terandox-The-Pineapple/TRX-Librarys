@@ -276,4 +276,4 @@ function add_controller_key(target, name, key, func)
     return controllers[index].keys[name]
 end
 
-return { add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key }
+return { add_player = add_player, add_enemy = add_enemy, add_other = add_other, add_background = add_background, add_menu = add_menu, add_menu_point = add_menu_point, change_background = change_background, change_menu = change_menu, add_controller = add_controller, add_controller_key = add_controller_key, players = players, enemys = enemys, others = others, backgrounds = backgrounds, menus = menus, controllers = controllers }
